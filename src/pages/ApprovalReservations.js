@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Typography, Table, Button, Tag, message, Space, Popconfirm, Modal, Alert, Spin } from 'antd';
 import axios from 'axios';
 import '../assets/Dashboard.css';
+import serverConfig from '../assets/server.json';
 
 const { Title } = Typography;
 
 // 创建 axios 实例
 const api = axios.create({
-  baseURL: 'http://119.45.92.47:7003',
+  baseURL: serverConfig.apiUrl,
   headers: {
     'Content-Type': 'application/json',
   },

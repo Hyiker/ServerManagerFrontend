@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Typography, Form, Input, Button, Card, message } from 'antd';
 import axios from 'axios';
+import serverConfig from '../assets/server.json';
 
 const { Title } = Typography;
 
 // 创建 axios 实例
 const api = axios.create({
-  baseURL: 'http://119.45.92.47:7003',
+  baseURL: serverConfig.apiUrl,
   headers: {
     'Content-Type': 'application/json',
   },

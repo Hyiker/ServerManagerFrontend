@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../assets/Login.css';
+import serverConfig from '../assets/server.json';
 
 // 创建 axios 实例
 const api = axios.create({
-  baseURL: 'http://119.45.92.47:7003',
+  baseURL: serverConfig.apiUrl,
   headers: {
     'Content-Type': 'application/json',
   },
