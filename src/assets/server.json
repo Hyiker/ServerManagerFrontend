@@ -1,0 +1,29 @@
+{
+  "apiUrl": "http://119.45.92.47:7003",
+  "servers": [
+    {
+      "name": "之江144",
+      "serverIp": "zj144"
+    },
+    {
+      "name": "之江56",
+      "serverIp": "zj56"
+    },
+    {
+      "name": "玉泉43",
+      "serverIp": "yq43"
+    },
+    {
+      "name": "玉泉70",
+      "serverIp": "yq70"
+    },
+    {
+      "name": "玉泉80",
+      "serverIp": "yq80"
+    },
+    {
+      "name": "玉泉90",
+      "serverIp": "yq90"
+    }
+  ]
+}

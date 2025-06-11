@@ -1,0 +1,50 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden; /* 防止水平滚动条 */
+  max-width: 100vw;
+}
+
+html {
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* 自适应图片 */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 基础响应式文本调整 */
+@media (max-width: 768px) {
+  html {
+    font-size: 95%;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 90%;
+  }
+}
+
+/* 针对高DPI屏幕的调整 */
+@media (min-resolution: 120dpi) {
+  body {
+    -webkit-text-size-adjust: 100%;
+  }
+}
