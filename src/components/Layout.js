@@ -14,7 +14,10 @@ import {
   CloudServerOutlined,
   AuditOutlined,
   TeamOutlined,
-  BookOutlined
+  BookOutlined,
+  DropboxOutlined,
+  DropboxSquareFilled,
+  InboxOutlined
 } from '@ant-design/icons';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import '../assets/Layout.css';
@@ -39,7 +42,7 @@ const MainLayout = () => {
   const location = useLocation();
   const username = localStorage.getItem('username') || 'User';
   const isRoot = localStorage.getItem('isRoot') === 'true';
-  
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -51,13 +54,13 @@ const MainLayout = () => {
   // 简化登出处理函数
   const handleLogout = () => {
     console.log("登出按钮被点击");
-    
+
     // 清除本地存储的认证信息
     localStorage.removeItem('token');
     localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('username');
     localStorage.removeItem('isRoot');
-    
+
     // 立即重定向到登录页
     window.location.href = '/login';
   };
@@ -71,15 +74,15 @@ const MainLayout = () => {
   const firstServerIndex = serverConfig.servers.length > 0 ? 0 : 0;
 
   // Determine which menu item is selected based on the current path
-  const selectedKey = location.pathname === '/' 
-    ? `/server/${firstServerIndex}` 
+  const selectedKey = location.pathname === '/'
+    ? `/server/${firstServerIndex}`
     : location.pathname;
 
   // 构建菜单项
   const buildMenuItems = () => {
     // 基本菜单项
     const menuItems = [];
-    
+
     // 如果用户是管理员，添加预约审批和用户管理菜单项
     if (isRoot) {
       menuItems.push({
@@ -88,7 +91,7 @@ const MainLayout = () => {
         label: '预约审批',
         onClick: () => handleMenuClick('/approval')
       });
-      
+
       menuItems.push({
         key: '/users',
         icon: <TeamOutlined />,
@@ -96,7 +99,7 @@ const MainLayout = () => {
         onClick: () => handleMenuClick('/users')
       });
     }
-    
+
     // 动态生成显卡预约子菜单（使用数组索引作为路由参数）
     const gpuReservationItems = serverConfig.servers.map((server, index) => ({
       key: `/server/${index}`,
@@ -110,7 +113,7 @@ const MainLayout = () => {
       label: '显卡预约',
       children: gpuReservationItems
     });
-    
+
     // 添加其他菜单项
     const otherMenuItems = [
       {
@@ -126,22 +129,28 @@ const MainLayout = () => {
         onClick: () => handleMenuClick('/containers')
       },
       {
+        key: '/games',
+        icon: <InboxOutlined />,
+        label: '小游戏',
+        onClick: () => handleMenuClick('/games')
+      },
+      {
         key: '/settings',
         icon: <SettingOutlined />,
         label: '设置',
         onClick: () => handleMenuClick('/settings')
       }
     ];
-    
+
     return [...menuItems, ...otherMenuItems];
   };
 
   return (
     <Layout className="main-layout">
-      <Sider 
-        trigger={null} 
-        collapsible 
-        collapsed={collapsed} 
+      <Sider
+        trigger={null}
+        collapsible
+        collapsed={collapsed}
         width={230}
         className="fixed-sidebar"
       >
@@ -171,8 +180,8 @@ const MainLayout = () => {
               <span className="username">{username}</span>
             </div>
             <div className="logout-button-wrapper">
-              <a 
-                href="#" 
+              <a
+                href="#"
                 onClick={(e) => {
                   e.preventDefault();
                   handleLogout();
