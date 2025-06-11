@@ -17,7 +17,8 @@ import {
   BookOutlined,
   DropboxOutlined,
   DropboxSquareFilled,
-  InboxOutlined
+  InboxOutlined,
+  HeartOutlined
 } from '@ant-design/icons';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import '../assets/Layout.css';
@@ -123,16 +124,22 @@ const MainLayout = () => {
         onClick: () => handleMenuClick('/reservations')
       },
       {
-        key: '/containers',
-        icon: <ContainerOutlined />,
-        label: '我的容器',
-        onClick: () => handleMenuClick('/containers')
+        key: '/luck',
+        icon: <HeartOutlined />,
+        label: '今日运势',
+        onClick: () => handleMenuClick('/luck')
       },
       {
         key: '/games',
         icon: <InboxOutlined />,
         label: '小游戏',
         onClick: () => handleMenuClick('/games')
+      },
+      {
+        key: '/containers',
+        icon: <ContainerOutlined />,
+        label: '我的容器',
+        onClick: () => handleMenuClick('/containers')
       },
       {
         key: '/settings',

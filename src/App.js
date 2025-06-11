@@ -10,6 +10,8 @@ import PrivateRoute from './components/PrivateRoute';
 import Login from './pages/Login';
 import ServerPage from './pages/ServerPage';
 import Settings from './pages/Settings';
+import TodayLuck from './pages/TodayLuck';
+import Games from './pages/Games';
 import MyReservations from './pages/MyReservations';
 import MyContainers from './pages/MyContainers';
 import ApprovalReservations from './pages/ApprovalReservations';
@@ -33,6 +35,8 @@ function App() {
             {/* 动态服务器路由 */}
             <Route path="/server/:serverId" element={<ServerPage />} />
             <Route path="/approval" element={<ApprovalReservations />} />
+            <Route path="/games" element={<Games />} />
+            <Route path="/luck" element={<TodayLuck />} />
             <Route path="/users" element={<UserManagement />} />
             <Route path="/reservations" element={<MyReservations />} />
             <Route path="/containers" element={<MyContainers />} />
