@@ -427,7 +427,7 @@ function Block() {
             speed = 2;
         }
 
-        if (keyIsDown(UP_ARROW) || btnControls['rotate'] === true) {
+        if (keyIsDown(87) || keyIsDown(UP_ARROW) || btnControls['rotate'] === true) {
             if (this.canRotate) {
                 this.rotate();
                 this.canRotate = false;
@@ -436,14 +436,14 @@ function Block() {
             this.canRotate = true;
         }
 
-        if (keyIsDown(LEFT_ARROW) || btnControls['left'] === true) {
+        if (keyIsDown(65) || keyIsDown(LEFT_ARROW) || btnControls['left'] === true) {
             this.pos.x -= speed;
             if (this.pos.x < 0) {
                 this.pos.x = 0;
             }
         }
 
-        if (keyIsDown(RIGHT_ARROW) || btnControls['right'] === true) {
+        if (keyIsDown(68) || keyIsDown(RIGHT_ARROW) || btnControls['right'] === true) {
             this.pos.x += speed;
             let w = blockWidth[this.type][this.rot] + 1;
             if (this.pos.x > columns - w * 8) {
@@ -451,7 +451,7 @@ function Block() {
             }
         }
 
-        if (keyIsDown(DOWN_ARROW) || btnControls['down'] === true) {
+        if (keyIsDown(83) || keyIsDown(DOWN_ARROW) || btnControls['down'] === true) {
             this.pos.y += 1;
             score += 1; // Bonus points for fast-dropping
         }
