@@ -1,0 +1,191 @@
+/* Layout.css (已修正，避免影响默认主题) */
+
+@import url(https://fonts.googleapis.com/css?family=VT323);
+
+@font-face {
+    font-family: 'chinese-retro';
+    /* 确保这个路径是正确的，相对于 CSS 文件的位置 */
+    src: url(../fonts/retro-font.ttf);
+}
+
+/* ======================================= */
+/* --- Retro 主题专属样式 (这部分不变) --- */
+/* ======================================= */
+
+/* 为所有在 .fallout-theme 下的元素应用复古字体和发光效果 */
+.fallout-theme {
+    text-shadow: 0 0 3px rgba(0, 255, 0, 0.6), 0 0 1px rgba(0, 255, 0, 0.8);
+}
+
+.fallout-theme * {
+    font-family: 'chinese-retro', 'VT323', monospace !important;
+}
+
+.fallout-switcher {
+    font-family: "VT323";
+    font-size: 1.4em;
+    color: #027802 !important;
+    font-weight: 500;
+}
+
+/* 移除现代UI的阴影，增加复古边框 */
+.fallout-theme .ant-layout-header,
+.fallout-theme .ant-layout-sider,
+.fallout-theme .ant-menu,
+.fallout-theme .ant-card,
+.fallout-theme .ant-modal-content,
+.fallout-theme .ant-popover-inner,
+.fallout-theme .ant-table {
+    box-shadow: none !important;
+    border: 1px solid rgba(0, 255, 0, 0.3) !important;
+}
+
+.fallout-theme .ant-layout-sider {
+    border-right: 1px solid rgba(0, 255, 0, 0.5) !important;
+    border-top: 0;
+    border-left: 0;
+    border-bottom: 0;
+}
+
+.fallout-theme .ant-layout-header {
+    border-bottom: 1px solid rgba(0, 255, 0, 0.5) !important;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+}
+
+/* Logo 样式增强 */
+.fallout-theme .logo {
+    color: #00ff00;
+    /* Retro主题下的Logo颜色 */
+    text-shadow: 0 0 5px #00ff00;
+}
+
+.fallout-theme .logo-icon {
+    color: #00ff00;
+    /* Retro主题下的Logo图标颜色 */
+}
+
+/* 按钮的文本阴影通常不需要，单独移除 */
+.fallout-theme .ant-btn,
+.fallout-theme .ant-select,
+.fallout-theme .ant-input {
+    text-shadow: none;
+}
+
+/* 链接样式 */
+.fallout-theme .logout-link,
+.fallout-theme .ant-btn-link {
+    color: #00ff00 !important;
+    text-shadow: none;
+}
+
+.fallout-theme .logout-link:hover,
+.fallout-theme .ant-btn-link:hover {
+    color: #8cff8c !important;
+}
+
+.fallout-theme .gpu-stat {
+    border-radius: 0;
+}
+
+.fallout-theme .gpu-usage-graph {
+    background-color: rgba(34, 34, 34, 0.8);
+    border-radius: 0;
+}
+
+.fallout-theme .gpu-memory-graph {
+    background-color: rgba(34, 34, 34, 0.8);
+    border-radius: 0;
+}
+
+
+/* ======================================================== */
+/* --- 通用布局样式 (已清理，不包含颜色等视觉样式) --- */
+/* ======================================================== */
+
+.main-layout {
+    min-height: 100vh;
+}
+
+.site-layout {
+    margin-left: 230px;
+    /* Sider width */
+    transition: margin-left 0.2s;
+}
+
+.site-layout-collapsed {
+    margin-left: 80px;
+    /* collapsed Sider width */
+    transition: margin-left 0.2s;
+}
+
+.fixed-sidebar {
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    overflow: auto;
+}
+
+/* Logo 的通用布局样式 */
+.logo {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    /* 关键改动：移除了 color: white; 属性，让主题系统控制颜色 */
+}
+
+/* Logo 图标的通用布局样式 */
+.logo-icon {
+    font-size: 24px;
+    margin-right: 8px;
+    /* 移除了颜色属性 */
+}
+
+.main-header {
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.trigger-button {
+    font-size: 18px;
+    width: 64px;
+    height: 64px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.username {
+    margin-left: 8px;
+}
+
+.logout-link {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    /* 移除了颜色属性，让 antd 的默认链接颜色或我们的主题颜色生效 */
+}
+
+.main-content {
+    margin: 24px 16px;
+    padding: 24px;
+    min-height: 280px;
+    /* 背景和圆角由 ConfigProvider 动态提供，这里只负责布局 */
+}

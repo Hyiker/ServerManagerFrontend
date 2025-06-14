@@ -2,15 +2,15 @@ import React from 'react';
 import { Tabs, Typography, Alert } from 'antd';
 
 const { TabPane } = Tabs;
-const { Title, Paragraph } = Typography;
+const { Title } = Typography;
 
 // 游戏配置对象
 const games = {
   sandtris: {
     name: '俄罗斯沙块 (Sandtris)',
     src: '/sandtris/index.html',
-    width: 1200,
-    height: 900,
+    width: 900,
+    height: 1000,
   },
   doom: {
     name: '毁灭战士 (Doom)',

@@ -28,7 +28,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
-        
+
         {/* Protected Routes */}
         <Route element={<PrivateRoute />}>
           <Route element={<MainLayout />}>
@@ -44,7 +44,7 @@ function App() {
             <Route path="/" element={<Navigate to={`/server/${defaultServerIndex}`} replace />} />
           </Route>
         </Route>
-        
+
         {/* Redirect any unknown paths to default server */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
