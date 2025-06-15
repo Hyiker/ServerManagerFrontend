@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { Layout, Menu, Button, Typography, Avatar, theme, ConfigProvider } from 'antd'; // 1. 导入 ConfigProvider
 import axios from 'axios';
+import { jwtDecode } from "jwt-decode";
+
 import {
     HomeOutlined,
     DesktopOutlined,
@@ -97,11 +99,20 @@ const MainLayout = () => {
     // ... handleMenuClick, handleLogout, toggleSider, buildMenuItems 等函数保持不变 ...
     const handleMenuClick = (key) => navigate(key);
     const handleLogout = () => {
+        let theme = localStorage.getItem('appTheme');
         localStorage.clear();
+        localStorage.setItem('appTheme', theme);
         window.location.href = '/login';
     };
     const toggleSider = () => setCollapsed(!collapsed);
     const buildMenuItems = () => { /* ... 菜单构建逻辑 ... */ return []; }; // 省略具体实现
+
+    let token = localStorage.getItem("token");
+    const tokenDec = jwtDecode(token);
+    if (Date.now() / 1000.0 > tokenDec["exp"]) {
+        alert("登录已过期");
+        handleLogout();
+    }
 
     return (
         <ConfigProvider theme={currentTheme === 'fallout' ? falloutThemeConfig : defaultThemeConfig}>
@@ -186,7 +197,7 @@ const AppLayout = ({ collapsed, toggleSider, currentTheme, toggleTheme, handleLo
                             <span className="username">{username}</span>
                         </div>
                         <div className="logout-button-wrapper">
-                            <Button  type="link" onClick={toggleTheme} className={currentTheme !== 'fallout' ? "fallout-switcher": ""}>
+                            <Button type="link" onClick={toggleTheme} className={currentTheme !== 'fallout' ? "fallout-switcher" : ""}>
                                 {currentTheme === 'fallout' ? 'Default Theme' : 'Retro Theme'}
                             </Button>
                         </div>
