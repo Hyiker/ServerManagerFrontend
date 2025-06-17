@@ -1,7 +1,7 @@
-// Layout.js (完整更新版)
+// Layout.js (完整更新版 - 加入键盘指令监听)
 
-import React, { useState } from 'react';
-import { Layout, Menu, Button, Typography, Avatar, theme, ConfigProvider } from 'antd'; // 1. 导入 ConfigProvider
+import React, { useState, useEffect, useRef } from 'react'; // 1. 导入 useEffect 和 useRef
+import { Layout, Menu, Button, Typography, Avatar, theme, ConfigProvider, Dropdown } from 'antd';
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
 
@@ -21,26 +21,24 @@ import {
     BookOutlined,
     DropboxOutlined,
     InboxOutlined,
-    HeartOutlined
+    HeartOutlined,
+    DownOutlined
 } from '@ant-design/icons';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import serverConfig from '../assets/server.json';
 
-import './Layout.css'; // 确保你的 CSS 文件被导入
+import './Layout.css';
 
+// ... 其他代码 (Header, Sider, api, theme configs, etc.) 保持不变 ...
 const { Header, Sider, Content } = Layout;
 const { Title } = Typography;
 const { SubMenu } = Menu;
 
-// 创建 axios 实例... (这部分不变)
 const api = axios.create({
     baseURL: serverConfig.apiUrl,
     headers: { 'Content-Type': 'application/json' },
 });
 
-
-// 2. 定义我们的主题对象
-// 使用 antd 的 theme.darkAlgorithm 作为我们复古主题的基础
 const { darkAlgorithm, defaultAlgorithm } = theme;
 
 const falloutThemeConfig = {
@@ -73,6 +71,11 @@ const defaultThemeConfig = {
     algorithm: defaultAlgorithm,
 };
 
+const availableThemes = [
+    { key: 'default', label: '默认主题' },
+    { key: 'fallout', label: '复古主题' },
+];
+
 
 const MainLayout = () => {
     const [collapsed, setCollapsed] = useState(false);
@@ -85,18 +88,64 @@ const MainLayout = () => {
     const username = localStorage.getItem('username') || 'User';
     const isRoot = localStorage.getItem('isRoot') === 'true';
 
-    // 这里是关键：useToken() 必须在 ConfigProvider 内部才能获取到正确的主题。
-    // 为了解决这个问题，我们将组件内容提取到一个子组件中。
-    // 或者，更简单的方法是，让 Header 和 Content 直接使用从 ConfigProvider 传递下来的 token。
-    // 我们将把 useToken() 的调用移到需要它的地方。
+    const konamiCode = [
+        'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+        'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
+        'b', 'a'
+    ];
+    // 使用 useRef 来追踪用户输入的序列位置，它不会在组件重渲染时重置
+    const konamiCodePosition = useRef(0);
 
-    const toggleTheme = () => {
-        const newTheme = currentTheme === 'default' ? 'fallout' : 'default';
-        setCurrentTheme(newTheme);
-        localStorage.setItem('appTheme', newTheme);
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            // 获取按键的 key，e.key 对于特殊按键（如箭头）有标准名称
+            const requiredKey = konamiCode[konamiCodePosition.current];
+
+            // 检查按下的键是否是序列中的下一个键
+            if (e.key === requiredKey) {
+                // 如果是，则将序列位置向前移动
+                konamiCodePosition.current++;
+
+                // 如果序列已经完成
+                if (konamiCodePosition.current === konamiCode.length) {
+                    // 执行你的操作
+                    if (localStorage.getItem("gameOn") === "true") {
+                        alert("Game Off~");
+                        localStorage.removeItem('gameOn');
+                    } else {
+                        alert('Game On!');
+                        localStorage.setItem('gameOn', 'true');
+                    }
+
+                    // 重置序列位置，以便可以再次输入
+                    konamiCodePosition.current = 0;
+                    window.location.reload();
+                }
+            } else {
+                // 如果按下了错误的键，重置序列
+                konamiCodePosition.current = 0;
+            }
+        };
+
+        // 在 document 上添加事件监听器
+        document.addEventListener('keydown', handleKeyDown);
+
+        // 组件卸载时，清理事件监听器，防止内存泄漏
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []); // 空依赖数组意味着这个 effect 只在组件挂载时运行一次
+
+    // ================================================================
+    // 键盘指令监听逻辑结束
+    // ================================================================
+
+
+    const handleThemeChange = (themeKey) => {
+        setCurrentTheme(themeKey);
+        localStorage.setItem('appTheme', themeKey);
     };
 
-    // ... handleMenuClick, handleLogout, toggleSider, buildMenuItems 等函数保持不变 ...
     const handleMenuClick = (key) => navigate(key);
     const handleLogout = () => {
         let theme = localStorage.getItem('appTheme');
@@ -105,9 +154,13 @@ const MainLayout = () => {
         window.location.href = '/login';
     };
     const toggleSider = () => setCollapsed(!collapsed);
-    const buildMenuItems = () => { /* ... 菜单构建逻辑 ... */ return []; }; // 省略具体实现
+    const buildMenuItems = () => { /* ... */ return []; };
 
     let token = localStorage.getItem("token");
+    if (!token) {
+        handleLogout();
+        return null;
+    }
     const tokenDec = jwtDecode(token);
     if (Date.now() / 1000.0 > tokenDec["exp"]) {
         alert("登录已过期");
@@ -116,12 +169,11 @@ const MainLayout = () => {
 
     return (
         <ConfigProvider theme={currentTheme === 'fallout' ? falloutThemeConfig : defaultThemeConfig}>
-            {/* 我们创建一个内部组件来消费 useToken() 的上下文 */}
             <AppLayout
                 collapsed={collapsed}
                 toggleSider={toggleSider}
                 currentTheme={currentTheme}
-                toggleTheme={toggleTheme}
+                handleThemeChange={handleThemeChange}
                 handleLogout={handleLogout}
                 username={username}
                 isRoot={isRoot}
@@ -132,18 +184,15 @@ const MainLayout = () => {
     );
 };
 
-// 创建一个内部组件，这样 useToken() 就能正确地从 ConfigProvider 的上下文中获取 token
-const AppLayout = ({ collapsed, toggleSider, currentTheme, toggleTheme, handleLogout, username, isRoot, location, buildMenuItems }) => {
+// AppLayout 组件保持不变
+const AppLayout = ({ collapsed, toggleSider, currentTheme, handleThemeChange, handleLogout, username, isRoot, location, buildMenuItems }) => {
 
-    // 现在 useToken() 在 ConfigProvider 内部，可以获取到正确的 token
     const { token: { colorBgContainer } } = theme.useToken();
     const navigate = useNavigate();
 
     const firstServerIndex = serverConfig.servers.length > 0 ? 0 : 0;
     const selectedKey = location.pathname === '/' ? `/server/${firstServerIndex}` : location.pathname;
 
-    // rebuild menu items here or pass them as props
-    // For simplicity, I'll copy the logic here. In a real app, you might pass it down.
     const buildMenuItemsFinal = () => {
         const handleMenuClick = (key) => navigate(key);
         const menuItems = [];
@@ -155,15 +204,29 @@ const AppLayout = ({ collapsed, toggleSider, currentTheme, toggleTheme, handleLo
             key: `/server/${index}`, label: server.name, onClick: () => handleMenuClick(`/server/${index}`)
         }));
         menuItems.push({ key: 'gpu-reservation', icon: <DesktopOutlined />, label: '显卡预约', children: gpuReservationItems });
+        const additionItems = [
+            { key: '/luck', icon: <HeartOutlined />, label: '今日运势', onClick: () => handleMenuClick('/luck') },
+            { key: '/games', icon: <InboxOutlined />, label: '小游戏', onClick: () => handleMenuClick('/games') },];
         const otherMenuItems = [
             { key: '/reservations', icon: <CalendarOutlined />, label: '我的预约', onClick: () => handleMenuClick('/reservations') },
-            { key: '/luck', icon: <HeartOutlined />, label: '今日运势', onClick: () => handleMenuClick('/luck') },
-            { key: '/games', icon: <InboxOutlined />, label: '小游戏', onClick: () => handleMenuClick('/games') },
             { key: '/containers', icon: <ContainerOutlined />, label: '我的容器', onClick: () => handleMenuClick('/containers') },
+            ...(localStorage.getItem("gameOn") === "true" ? additionItems : []),
             { key: '/settings', icon: <SettingOutlined />, label: '设置', onClick: () => handleMenuClick('/settings') }
         ];
+
+
+
         return [...menuItems, ...otherMenuItems];
     };
+
+    const themeMenuProps = {
+        items: availableThemes,
+        selectable: true,
+        selectedKeys: [currentTheme],
+        onClick: ({ key }) => handleThemeChange(key),
+    };
+
+    const currentThemeLabel = availableThemes.find(theme => theme.key === currentTheme)?.label || '选择主题';
 
     return (
         <Layout className={`main-layout ${currentTheme === 'fallout' ? 'fallout-theme' : ''}`}>
@@ -172,7 +235,6 @@ const AppLayout = ({ collapsed, toggleSider, currentTheme, toggleTheme, handleLo
                     <CloudServerOutlined className="logo-icon" />
                     {!collapsed && <span className="logo-text">GPU Manager</span>}
                 </div>
-                {/* 关键修正 1: 移除 theme='dark' 属性，让 ConfigProvider 控制主题 */}
                 <Menu
                     theme='dark'
                     mode="inline"
@@ -182,25 +244,26 @@ const AppLayout = ({ collapsed, toggleSider, currentTheme, toggleTheme, handleLo
                 />
             </Sider>
             <Layout className={collapsed ? 'site-layout-collapsed' : 'site-layout'}>
-                {/* 关键修正 2: 恢复 style 属性，这是正确的做法 */}
                 <Header className="main-header" style={{ background: colorBgContainer, padding: '0 24px' }}>
                     <Button
                         type="text"
                         icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                         onClick={toggleSider}
                         className="trigger-button"
-                        style={{ color: currentTheme === 'fallout' ? '#00ff00' : 'inherit' }} // 确保按钮在两种主题下都可见
+                        style={{ color: currentTheme === 'fallout' ? '#00ff00' : 'inherit' }}
                     />
                     <div className="header-right">
                         <div className="user-info">
                             <Avatar icon={<UserOutlined />} />
                             <span className="username">{username}</span>
                         </div>
-                        <div className="logout-button-wrapper">
-                            <Button type="link" onClick={toggleTheme} className={currentTheme !== 'fallout' ? "fallout-switcher" : ""}>
-                                {currentTheme === 'fallout' ? 'Default Theme' : 'Retro Theme'}
-                            </Button>
-                        </div>
+
+                        <Dropdown menu={themeMenuProps} trigger={['click']}>
+                            <a href="#" onClick={(e) => e.preventDefault()} className="logout-link">
+                                {currentThemeLabel} <DownOutlined style={{ fontSize: '12px' }} />
+                            </a>
+                        </Dropdown>
+
                         <div className="logout-button-wrapper">
                             <a href="#" onClick={(e) => { e.preventDefault(); handleLogout(); }} className="logout-link">
                                 <LogoutOutlined /> 退出
@@ -208,7 +271,6 @@ const AppLayout = ({ collapsed, toggleSider, currentTheme, toggleTheme, handleLo
                         </div>
                     </div>
                 </Header>
-                {/* Content 的背景色也由 ConfigProvider 自动处理，所以无需 style */}
                 <Content className="main-content" style={{ background: colorBgContainer }}>
                     <Outlet />
                 </Content>
