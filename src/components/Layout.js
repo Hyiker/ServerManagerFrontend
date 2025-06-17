@@ -227,6 +227,7 @@ const AppLayout = ({ collapsed, toggleSider, currentTheme, handleThemeChange, ha
     };
 
     const currentThemeLabel = availableThemes.find(theme => theme.key === currentTheme)?.label || '选择主题';
+    const isGameOn = localStorage.getItem("gameOn") === "true";
 
     return (
         <Layout className={`main-layout ${currentTheme === 'fallout' ? 'fallout-theme' : ''}`}>
@@ -258,11 +259,11 @@ const AppLayout = ({ collapsed, toggleSider, currentTheme, handleThemeChange, ha
                             <span className="username">{username}</span>
                         </div>
 
-                        <Dropdown menu={themeMenuProps} trigger={['click']}>
+                        {isGameOn && <Dropdown menu={themeMenuProps} trigger={['click']}>
                             <a href="#" onClick={(e) => e.preventDefault()} className="logout-link">
                                 {currentThemeLabel} <DownOutlined style={{ fontSize: '12px' }} />
                             </a>
-                        </Dropdown>
+                        </Dropdown>}
 
                         <div className="logout-button-wrapper">
                             <a href="#" onClick={(e) => { e.preventDefault(); handleLogout(); }} className="logout-link">
