@@ -22,7 +22,8 @@ import {
     DropboxOutlined,
     InboxOutlined,
     HeartOutlined,
-    DownOutlined
+    DownOutlined,
+    ClockCircleOutlined
 } from '@ant-design/icons';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import serverConfig from '../assets/server.json';
@@ -206,7 +207,8 @@ const AppLayout = ({ collapsed, toggleSider, currentTheme, handleThemeChange, ha
         menuItems.push({ key: 'gpu-reservation', icon: <DesktopOutlined />, label: '显卡预约', children: gpuReservationItems });
         const additionItems = [
             { key: '/luck', icon: <HeartOutlined />, label: '今日运势', onClick: () => handleMenuClick('/luck') },
-            { key: '/games', icon: <InboxOutlined />, label: '小游戏', onClick: () => handleMenuClick('/games') },];
+            { key: '/games', icon: <InboxOutlined />, label: '小游戏', onClick: () => handleMenuClick('/games') },
+            { key: '/eat', icon: <ClockCircleOutlined />, label: '吃什么', onClick: () => handleMenuClick('/eat') },];
         const otherMenuItems = [
             { key: '/reservations', icon: <CalendarOutlined />, label: '我的预约', onClick: () => handleMenuClick('/reservations') },
             { key: '/containers', icon: <ContainerOutlined />, label: '我的容器', onClick: () => handleMenuClick('/containers') },

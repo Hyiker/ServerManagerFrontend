@@ -11,6 +11,7 @@ import Login from './pages/Login';
 import ServerPage from './pages/ServerPage';
 import Settings from './pages/Settings';
 import TodayLuck from './pages/TodayLuck';
+import WhatToEat from './pages/WhatToEat';
 import Games from './pages/Games';
 import MyReservations from './pages/MyReservations';
 import MyContainers from './pages/MyContainers';
@@ -37,6 +38,7 @@ function App() {
             <Route path="/approval" element={<ApprovalReservations />} />
             <Route path="/games" element={<Games />} />
             <Route path="/luck" element={<TodayLuck />} />
+            <Route path="/eat" element={<WhatToEat />} />
             <Route path="/users" element={<UserManagement />} />
             <Route path="/reservations" element={<MyReservations />} />
             <Route path="/containers" element={<MyContainers />} />
