@@ -149,9 +149,10 @@ const MainLayout = () => {
 
     const handleMenuClick = (key) => navigate(key);
     const handleLogout = () => {
-        let theme = localStorage.getItem('appTheme');
-        localStorage.clear();
-        localStorage.setItem('appTheme', theme);
+        localStorage.removeItem('token');
+        localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('username');
+        localStorage.removeItem('isRoot');
         window.location.href = '/login';
     };
     const toggleSider = () => setCollapsed(!collapsed);
