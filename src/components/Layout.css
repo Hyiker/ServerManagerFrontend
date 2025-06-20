@@ -1,4 +1,4 @@
-/* Layout.css (已修正，避免影响默认主题) */
+/* Layout.css (已修正，并已适配 ant-modal) */
 
 @import url(https://fonts.googleapis.com/css?family=VT323);
 
@@ -35,7 +35,8 @@
 .fallout-theme .ant-card,
 .fallout-theme .ant-modal-content,
 .fallout-theme .ant-popover-inner,
-.fallout-theme .ant-table {
+.fallout-theme .ant-table,
+.fallout-theme .ant-modal-content { /* .ant-modal-content 已在此处 */
     box-shadow: none !important;
     border: 1px solid rgba(0, 255, 0, 0.3) !important;
 }
@@ -97,6 +98,80 @@
 .fallout-theme .gpu-memory-graph {
     background-color: rgba(34, 34, 34, 0.8);
     border-radius: 0;
+}
+
+
+/* ======================================================== */
+/* --- 新增：Retro 主题 ant-modal 专属样式 --- */
+/* ======================================================== */
+
+/* Modal 整体容器：黑色背景、无圆角 */
+.fallout-theme .ant-modal-content {
+    background: #000 !important;
+    border-radius: 0 !important;
+}
+
+/* Modal 头部：透明背景（使用content的背景）、底部边框 */
+.fallout-theme .ant-modal-header {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(0, 255, 0, 0.3) !important;
+}
+
+/* Modal 标题：亮绿色 */
+.fallout-theme .ant-modal-title {
+    color: #00ff00 !important;
+    /* text-shadow 会从 .fallout-theme 继承 */
+}
+
+/* Modal 内容区域：文字颜色设为稍暗的绿色以区分标题 */
+.fallout-theme .ant-modal-body {
+    color: rgba(0, 255, 0, 0.8) !important;
+}
+
+/* Modal 关闭按钮 "X" */
+.fallout-theme .ant-modal-close {
+    color: #00ff00 !important;
+}
+.fallout-theme .ant-modal-close:hover {
+    color: #8cff8c !important;
+}
+
+/* Modal 脚部：透明背景、顶部边框 */
+.fallout-theme .ant-modal-footer {
+    background: transparent !important;
+    border-top: 1px solid rgba(0, 255, 0, 0.3) !important;
+    padding: 10px 16px;
+}
+
+/* Modal 脚部按钮：通用样式（线框按钮） */
+.fallout-theme .ant-modal-footer .ant-btn {
+    background: transparent !important;
+    border: 1px solid rgba(0, 255, 0, 0.5) !important;
+    color: rgba(0, 255, 0, 0.8) !important;
+    border-radius: 0 !important;
+    text-shadow: none; /* 再次确认无阴影 */
+}
+
+/* Modal 脚部按钮：悬浮/聚焦状态 */
+.fallout-theme .ant-modal-footer .ant-btn:hover,
+.fallout-theme .ant-modal-footer .ant-btn:focus {
+    color: #00ff00 !important;
+    border-color: #00ff00 !important;
+    background: rgba(0, 255, 0, 0.1) !important; /* 添加微弱的发光背景 */
+}
+
+/* Modal 脚部主按钮（通常是"确定"）：给一个深绿色背景以示区分 */
+.fallout-theme .ant-modal-footer .ant-btn-primary {
+    background: #003d00 !important; /* 深绿色背景 */
+    border-color: rgba(0, 255, 0, 0.8) !important;
+    color: #00ff00 !important;
+}
+
+/* Modal 脚部主按钮：悬浮/聚焦状态 */
+.fallout-theme .ant-modal-footer .ant-btn-primary:hover,
+.fallout-theme .ant-modal-footer .ant-btn-primary:focus {
+    background: #005200 !important; /* 稍亮的深绿色背景 */
+    border-color: #00ff00 !important;
 }
 
 
@@ -180,7 +255,7 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    /* 移除了颜色属性，让 antd 的默认链接颜色或我们的主题颜色生效 */
+    /* 颜色由主题系统控制 */
 }
 
 .main-content {
